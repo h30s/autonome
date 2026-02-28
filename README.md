@@ -150,11 +150,12 @@ npm run test:intel -- 0xYOUR_ADDRESS_HERE   # Custom address
 The agent's API requires x402 payment. Use another PinionClient to call it:
 
 ```typescript
-import { payX402Service } from "pinion-os";
+import { PinionClient, payX402Service } from "pinion-os";
 
+const pinion = new PinionClient({ privateKey: "0xYOUR_CLIENT_KEY" });
 const result = await payX402Service(
-  "http://localhost:4020/intel/0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
-  { privateKey: "0xYOUR_CLIENT_KEY" }
+  pinion.signer,
+  "http://localhost:4020/intel/0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
 );
 console.log(result); // Full intelligence report
 ```
