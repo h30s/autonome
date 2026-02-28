@@ -23,6 +23,7 @@ class AgentCore {
     private config: AgentConfig;
     private pinion: PinionClient;
     private profitEngine: ProfitEngine;
+    private isRunning: boolean = false;
 
     constructor(config: AgentConfig) {
         this.config = config;
@@ -72,6 +73,7 @@ class AgentCore {
         this.profitEngine.start();
 
         // Update agent state
+        this.isRunning = true;
         setAgentState("status", "running");
         eventBus.emit("agent:started", {
             wallet: this.config.walletAddress,
@@ -84,6 +86,22 @@ class AgentCore {
         console.log(`  🔌 API: http://localhost:${this.config.skillServerPort}`);
         console.log("═══════════════════════════════════════════════════\n");
         console.log("Waiting for incoming intelligence requests...\n");
+    }
+
+    /**
+     * Stop the autonomous agent gracefully.
+     * Shuts down the profit engine and updates agent state.
+     */
+    async stop(): Promise<void> {
+        if (!this.isRunning) return;
+
+        console.log("\n🛑 Stopping Autonome agent...");
+        this.profitEngine.stop();
+        this.isRunning = false;
+        setAgentState("status", "stopped");
+        setAgentState("stopped_at", new Date().toISOString());
+        eventBus.emit("agent:stopped", {});
+        console.log("✅ Agent stopped gracefully.");
     }
 }
 
@@ -98,15 +116,14 @@ async function main() {
         await agent.start();
 
         // Graceful shutdown
-        process.on("SIGINT", () => {
+        process.on("SIGINT", async () => {
             console.log("\n\n🛑 Shutting down Autonome...");
-            setAgentState("status", "stopped");
-            eventBus.emit("agent:stopped", {});
+            await agent.stop();
             process.exit(0);
         });
 
-        process.on("SIGTERM", () => {
-            setAgentState("status", "stopped");
+        process.on("SIGTERM", async () => {
+            await agent.stop();
             process.exit(0);
         });
     } catch (error: any) {

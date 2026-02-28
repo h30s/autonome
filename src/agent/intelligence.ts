@@ -3,6 +3,7 @@
 // a structured intelligence report that no single skill provides.
 
 import type { PinionClient } from "pinion-os";
+import { payX402Service } from "pinion-os";
 import { eventBus } from "./event-bus";
 import { recordExpense } from "../db/index";
 import { safeParseFloat } from "../lib/utils";
@@ -77,6 +78,29 @@ export async function generateIntelReport(
     } catch (err: any) {
         eventBus.emit("skill:failed", {
             skill: "fund",
+            error: err.message,
+        });
+    }
+
+    // ── STEP 3.5: External x402 enrichment via payX402Service ─────────
+    // Demonstrates payX402Service SDK usage — calls an external x402-paywalled
+    // data source for additional context (cross-referencing via the PinionOS public API)
+    let externalEnrichment: any = null;
+    try {
+        eventBus.emit("skill:calling", { skill: "payX402Service", detail: "external data enrichment" });
+        const enrichResult = await payX402Service(
+            pinion.signer,
+            `https://skills.pinionfun.com/api/v1/balance/${address}`
+        );
+        externalEnrichment = enrichResult;
+        expenses.push({ skill: "payX402Service", cost: 0.01 });
+        skillsUsed.push("payX402Service");
+        recordExpense("payX402Service", 0.01);
+        eventBus.emit("skill:completed", { skill: "payX402Service", cost: 0.01 });
+    } catch (err: any) {
+        // Non-critical — enrichment is optional, agent continues without it
+        eventBus.emit("skill:failed", {
+            skill: "payX402Service",
             error: err.message,
         });
     }

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#050a12" />
+      <stop offset="100%" style="stop-color:#0a1120" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00ff88" />
+      <stop offset="100%" style="stop-color:#00cc6a" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)" />
+
+  <!-- Subtle grid -->
+  <g stroke="#1a2744" stroke-width="0.5" opacity="0.4">
+    <line x1="0" y1="0" x2="1200" y2="630" />
+    <line x1="1200" y1="0" x2="0" y2="630" />
+    <line x1="600" y1="0" x2="600" y2="630" />
+    <line x1="0" y1="315" x2="1200" y2="315" />
+  </g>
+
+  <!-- Lightning bolt icon -->
+  <g transform="translate(520, 160)">
+    <path d="M100 0L40 120h50l-25 110L125 110H85L100 0z" fill="url(#accent)" opacity="0.9"/>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="380" text-anchor="middle" fill="#f0f4f8" font-family="monospace" font-size="72" font-weight="bold" letter-spacing="-2">
+    <tspan fill="#00ff88">⚡</tspan> AUTONOME
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="430" text-anchor="middle" fill="#8899b4" font-family="sans-serif" font-size="24">
+    Self-Operating AI Agent on PinionOS
+  </text>
+
+  <!-- Tagline -->
+  <text x="600" y="480" text-anchor="middle" fill="#4a5f80" font-family="sans-serif" font-size="18">
+    Earns • Spends • Profits • Reinvests — Autonomously
+  </text>
+
+  <!-- Bottom border accent -->
+  <rect x="0" y="620" width="1200" height="10" fill="url(#accent)" opacity="0.6" />
+</svg>

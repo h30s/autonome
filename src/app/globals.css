@@ -1,6 +1,5 @@
 /* Autonome — Dark Bloomberg-Terminal Design System */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+/* Fonts loaded via next/font/google in layout.tsx for optimal performance */
 
 :root {
   /* Surfaces */
@@ -10,12 +9,12 @@
   --bg-card-hover: #111d33;
   --border: #1a2744;
   --border-light: #243352;
-  
+
   /* Text */
   --text-primary: #f0f4f8;
   --text-secondary: #8899b4;
   --text-muted: #4a5f80;
-  
+
   /* Accent Colors */
   --green: #00ff88;
   --green-dim: #00cc6a;
@@ -29,11 +28,11 @@
   --gold: #ffaa00;
   --gold-bg: rgba(255, 170, 0, 0.08);
   --purple: #aa66ff;
-  
+
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  
+
   /* Spacing */
   --radius: 12px;
   --radius-sm: 8px;
@@ -46,7 +45,8 @@
   padding: 0;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   font-family: var(--font-sans);
   background: var(--bg-primary);
@@ -56,13 +56,22 @@ html, body {
 }
 
 /* ─── SCROLLBAR ──────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
 ::-webkit-scrollbar-thumb {
   background: var(--border-light);
   border-radius: 3px;
 }
-::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
 
 /* ─── LAYOUT ─────────────────────────────────────────────────────── */
 .dashboard {
@@ -142,12 +151,24 @@ html, body {
   animation: pulse 2s infinite;
 }
 
-.status-dot.running { background: var(--green); }
-.status-dot.stopped { background: var(--red); }
+.status-dot.running {
+  background: var(--green);
+}
+
+.status-dot.stopped {
+  background: var(--red);
+}
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
 }
 
 .wallet-address {
@@ -187,9 +208,17 @@ html, body {
   height: 2px;
 }
 
-.metric-card.revenue::before { background: linear-gradient(90deg, var(--green), transparent); }
-.metric-card.expenses::before { background: linear-gradient(90deg, var(--red), transparent); }
-.metric-card.profit::before { background: linear-gradient(90deg, var(--gold), transparent); }
+.metric-card.revenue::before {
+  background: linear-gradient(90deg, var(--green), transparent);
+}
+
+.metric-card.expenses::before {
+  background: linear-gradient(90deg, var(--red), transparent);
+}
+
+.metric-card.profit::before {
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
 
 .metric-card:hover {
   border-color: var(--border-light);
@@ -216,9 +245,17 @@ html, body {
   margin-bottom: 4px;
 }
 
-.metric-value.green { color: var(--green); }
-.metric-value.red { color: var(--red); }
-.metric-value.gold { color: var(--gold); }
+.metric-value.green {
+  color: var(--green);
+}
+
+.metric-value.red {
+  color: var(--red);
+}
+
+.metric-value.gold {
+  color: var(--gold);
+}
 
 .metric-sub {
   font-size: 12px;
@@ -290,7 +327,9 @@ html, body {
   border-bottom: 1px solid var(--border);
 }
 
-.wallet-item:last-child { border-bottom: none; }
+.wallet-item:last-child {
+  border-bottom: none;
+}
 
 .wallet-token {
   font-weight: 500;
@@ -338,8 +377,13 @@ html, body {
 }
 
 @keyframes glow {
-  from { box-shadow: 0 0 4px var(--gold); }
-  to { box-shadow: 0 0 12px var(--gold); }
+  from {
+    box-shadow: 0 0 4px var(--gold);
+  }
+
+  to {
+    box-shadow: 0 0 12px var(--gold);
+  }
 }
 
 /* ─── ACTIVITY FEED ──────────────────────────────────────────────── */
@@ -363,6 +407,7 @@ html, body {
     opacity: 0;
     transform: translateY(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -404,10 +449,21 @@ html, body {
   font-weight: 600;
 }
 
-.activity-text .amount.earned { color: var(--green); }
-.activity-text .amount.spent { color: var(--red); }
-.activity-text .amount.profit { color: var(--gold); }
-.activity-text .amount.reinvest { color: var(--purple); }
+.activity-text .amount.earned {
+  color: var(--green);
+}
+
+.activity-text .amount.spent {
+  color: var(--red);
+}
+
+.activity-text .amount.profit {
+  color: var(--gold);
+}
+
+.activity-text .amount.reinvest {
+  color: var(--purple);
+}
 
 /* ─── REINVESTMENT TABLE ─────────────────────────────────────────── */
 .reinvest-table {
@@ -464,15 +520,123 @@ html, body {
   font-size: 13px;
 }
 
+/* ─── AGENT CONTROLS ─────────────────────────────────────────────── */
+.controls-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.control-btn {
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.control-btn:hover:not(:disabled) {
+  border-color: var(--border-light);
+  background: var(--bg-card-hover);
+}
+
+.control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.control-btn.start {
+  background: var(--green-bg);
+  color: var(--green);
+  border-color: rgba(0, 255, 136, 0.2);
+}
+
+.control-btn.start:hover:not(:disabled) {
+  background: rgba(0, 255, 136, 0.15);
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.1);
+}
+
+.control-btn.stop {
+  background: var(--red-bg);
+  color: var(--red);
+  border-color: rgba(255, 68, 102, 0.2);
+}
+
+.control-btn.stop:hover:not(:disabled) {
+  background: rgba(255, 68, 102, 0.15);
+}
+
+.control-btn.refresh {
+  background: var(--blue-bg);
+  color: var(--blue);
+  border-color: rgba(68, 136, 255, 0.2);
+}
+
+.control-btn.intel {
+  background: var(--gold-bg);
+  color: var(--gold);
+  border-color: rgba(255, 170, 0, 0.2);
+  white-space: nowrap;
+}
+
+.control-btn.intel:hover:not(:disabled) {
+  background: rgba(255, 170, 0, 0.15);
+}
+
+.intel-input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.intel-input:focus {
+  border-color: var(--gold);
+}
+
+.intel-input::placeholder {
+  color: var(--text-muted);
+}
+
 /* ─── RESPONSIVE ─────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  .metrics-grid { grid-template-columns: 1fr; }
-  .secondary-grid { grid-template-columns: 1fr; }
-  .metric-value { font-size: 28px; }
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .secondary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-value {
+    font-size: 28px;
+  }
 }
 
 @media (max-width: 768px) {
-  .dashboard { padding: 16px; }
-  .header { flex-direction: column; gap: 12px; align-items: flex-start; }
-  .header-status { width: 100%; justify-content: space-between; }
+  .dashboard {
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .header-status {
+    width: 100%;
+    justify-content: space-between;
+  }
 }

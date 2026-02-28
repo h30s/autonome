@@ -8,6 +8,52 @@ Autonome is a self-operating software agent that earns USDC by selling AI-powere
 
 ---
 
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     AUTONOME SYSTEM                          │
+│                                                              │
+│  ┌──────────────────────────────────────────────────────┐    │
+│  │              NEXT.JS APPLICATION                      │    │
+│  │                                                       │    │
+│  │  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐ │    │
+│  │  │  Dashboard   │  │  API Routes  │  │  SSE Events  │ │    │
+│  │  │  (React)     │  │  (Next API)  │  │  Endpoint    │ │    │
+│  │  └──────┬──────┘  └──────┬───────┘  └──────┬───────┘ │    │
+│  │         │                │                  │          │    │
+│  └─────────┼────────────────┼──────────────────┼──────────┘    │
+│            │                │                  │               │
+│  ┌─────────┼────────────────┼──────────────────┼──────────┐    │
+│  │         ▼                ▼                  ▼          │    │
+│  │              AGENT CORE (TypeScript)                    │    │
+│  │                                                        │    │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │    │
+│  │  │ Skill Server │  │  Pinion      │  │  Profit      │ │    │
+│  │  │ (Earns USDC) │  │  Client      │  │  Engine      │ │    │
+│  │  │              │  │  (Spends)    │  │  (Reinvests) │ │    │
+│  │  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘ │    │
+│  │         │                 │                  │         │    │
+│  │  ┌──────┴─────────────────┴──────────────────┴───────┐ │    │
+│  │  │              Event Bus (EventEmitter)              │ │    │
+│  │  └──────────────────────┬────────────────────────────┘ │    │
+│  │                         │                              │    │
+│  │  ┌──────────────────────┴────────────────────────────┐ │    │
+│  │  │              SQLite Database                       │ │    │
+│  │  │  (transactions, metrics, agent state)              │ │    │
+│  │  └───────────────────────────────────────────────────┘ │    │
+│  └────────────────────────────────────────────────────────┘    │
+│                         │                                      │
+│            ┌────────────┼────────────┐                         │
+│            ▼            ▼            ▼                         │
+│    ┌──────────┐  ┌──────────┐  ┌──────────┐                   │
+│    │PinionOS  │  │ External │  │  Base L2  │                   │
+│    │Skill API │  │ x402 APIs│  │  Network  │                   │
+│    │$0.01/call│  │(payX402) │  │  (USDC)   │                   │
+│    └──────────┘  └──────────┘  └──────────┘                   │
+└─────────────────────────────────────────────────────────────┘
+```
+
 ## The Economic Loop
 
 ```
@@ -45,9 +91,10 @@ User/Agent pays $0.08 via x402
 | `skills.chat()` | AI-generated risk assessment |
 | `skills.trade()` | Autonomous reinvestment: USDC → ETH |
 | `skills.broadcast()` | On-chain trade execution |
-| `payX402Service` | External x402 service integration |
-| `skills.wallet()` | Wallet generation |
-| x402 middleware | Automatic payment verification |
+| `payX402Service` | External x402 data enrichment in intelligence pipeline |
+| `spend_limit` | Session budget tracking on dashboard |
+| x402 middleware | Automatic payment verification (via `createSkillServer`) |
+| `/catalog` endpoint | Auto-generated skill discovery (via `createSkillServer`) |
 
 ## Quick Start
 
@@ -58,7 +105,7 @@ User/Agent pays $0.08 via x402
 ### Setup
 
 ```bash
-git clone https://github.com/<your-username>/autonome
+git clone https://github.com/h30s/autonome
 cd autonome
 npm install
 cp .env.example .env.local
@@ -77,7 +124,12 @@ AGENT_WALLET_ADDRESS=0xYOUR_ADDRESS
 npm run dev
 ```
 
-**Option 2: Dashboard only (with demo data)**
+**Option 2: Dashboard with demo data**
+```bash
+npm run demo   # Seeds data + starts everything
+```
+
+**Option 3: Dashboard only**
 ```bash
 npm run seed           # Pre-populate with demo data
 npm run dev:dashboard  # Start the dashboard
@@ -85,6 +137,13 @@ npm run dev:dashboard  # Start the dashboard
 
 - Dashboard: http://localhost:3000
 - Agent API: http://localhost:4020
+
+### Test the Intelligence Pipeline
+
+```bash
+npm run test:intel                          # Uses default address
+npm run test:intel -- 0xYOUR_ADDRESS_HERE   # Custom address
+```
 
 ### Test the Intelligence API
 
@@ -100,12 +159,25 @@ const result = await payX402Service(
 console.log(result); // Full intelligence report
 ```
 
-## Architecture
+## Architecture Details
 
 - **Agent Process** (`npm run agent`): Runs the PinionOS skill server on port 4020 and the profit engine
 - **Dashboard** (`npm run dev:dashboard`): Next.js on port 3000, reads from shared SQLite database
 - **Database**: SQLite (via `better-sqlite3`) stores all transactions, metrics, agent state
-- **Real-time**: Dashboard polls `/api/metrics` every 2 seconds for live updates
+- **Real-time**: SSE endpoint at `/api/events` + dashboard polling for live updates
+
+## API Routes
+
+| Route | Method | Description |
+|---|---|---|
+| `/api/metrics` | GET | Current agent metrics (revenue, expenses, profit) |
+| `/api/transactions` | GET | Recent transaction history |
+| `/api/timeseries` | GET | Time-series data for charts |
+| `/api/agent/status` | GET | Agent status and wallet info |
+| `/api/agent/start` | POST | Start the agent |
+| `/api/agent/stop` | POST | Stop the agent |
+| `/api/intel` | POST | Trigger demo intelligence report |
+| `/api/events` | GET | SSE stream for real-time updates |
 
 ## Tech Stack
 
@@ -115,7 +187,7 @@ console.log(result); // Full intelligence report
 | PinionOS SDK | Core dependency — all agent operations |
 | Next.js 14 | Dashboard with App Router |
 | SQLite | Transaction and metrics storage |
-| SVG Charts | Custom built, zero dependency |
+| SVG Charts | Custom-built profit charts, zero dependency |
 | Base L2 | Settlement network (USDC) |
 
 ## Project Structure
@@ -132,13 +204,32 @@ src/
 ├── db/
 │   └── index.ts        # SQLite schema + queries
 ├── lib/
+│   ├── pinion.ts       # PinionClient singleton
 │   ├── constants.ts    # Configuration constants
 │   └── utils.ts        # Utility functions
 └── app/                # Next.js dashboard
     ├── layout.tsx      # Root layout
-    ├── page.tsx        # Dashboard UI
+    ├── page.tsx        # Dashboard page (data fetching)
     ├── globals.css     # Design system
+    ├── components/     # Extracted UI components
+    │   ├── Dashboard.tsx     # Main layout assembler
+    │   ├── Header.tsx        # Brand header with status
+    │   ├── MetricsPanel.tsx  # Revenue/expenses/profit cards
+    │   ├── ProfitChart.tsx   # SVG line chart
+    │   ├── WalletStatus.tsx  # Balance display + reinvest progress
+    │   ├── ActivityFeed.tsx  # Real-time transaction log
+    │   ├── ReinvestLog.tsx   # Reinvestment history table
+    │   └── AgentControls.tsx # Start/stop/demo buttons
     └── api/            # API routes
+        ├── metrics/         # GET metrics
+        ├── transactions/    # GET transactions
+        ├── timeseries/      # GET chart data
+        ├── events/          # SSE stream
+        ├── intel/           # POST demo intel trigger
+        └── agent/
+            ├── status/      # GET agent status
+            ├── start/       # POST start agent
+            └── stop/        # POST stop agent
 ```
 
 ## License
