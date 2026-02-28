@@ -1,0 +1,478 @@
+/* Autonome — Dark Bloomberg-Terminal Design System */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Surfaces */
+  --bg-primary: #050a12;
+  --bg-secondary: #0a1120;
+  --bg-card: #0d1729;
+  --bg-card-hover: #111d33;
+  --border: #1a2744;
+  --border-light: #243352;
+  
+  /* Text */
+  --text-primary: #f0f4f8;
+  --text-secondary: #8899b4;
+  --text-muted: #4a5f80;
+  
+  /* Accent Colors */
+  --green: #00ff88;
+  --green-dim: #00cc6a;
+  --green-bg: rgba(0, 255, 136, 0.08);
+  --green-glow: rgba(0, 255, 136, 0.2);
+  --red: #ff4466;
+  --red-dim: #cc3652;
+  --red-bg: rgba(255, 68, 102, 0.08);
+  --blue: #4488ff;
+  --blue-bg: rgba(68, 136, 255, 0.08);
+  --gold: #ffaa00;
+  --gold-bg: rgba(255, 170, 0, 0.08);
+  --purple: #aa66ff;
+  
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  
+  /* Spacing */
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── SCROLLBAR ──────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ─── LAYOUT ─────────────────────────────────────────────────────── */
+.dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+  min-height: 100vh;
+}
+
+/* ─── HEADER ─────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-logo {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--green);
+  font-family: var(--font-mono);
+  letter-spacing: -1px;
+}
+
+.header-logo span {
+  color: var(--text-primary);
+}
+
+.header-tagline {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-mono);
+}
+
+.status-badge.running {
+  background: var(--green-bg);
+  color: var(--green);
+  border: 1px solid rgba(0, 255, 136, 0.15);
+}
+
+.status-badge.stopped {
+  background: var(--red-bg);
+  color: var(--red);
+  border: 1px solid rgba(255, 68, 102, 0.15);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.status-dot.running { background: var(--green); }
+.status-dot.stopped { background: var(--red); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.wallet-address {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+/* ─── METRICS PANEL ──────────────────────────────────────────────── */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+}
+
+.metric-card.revenue::before { background: linear-gradient(90deg, var(--green), transparent); }
+.metric-card.expenses::before { background: linear-gradient(90deg, var(--red), transparent); }
+.metric-card.profit::before { background: linear-gradient(90deg, var(--gold), transparent); }
+
+.metric-card:hover {
+  border-color: var(--border-light);
+  background: var(--bg-card-hover);
+}
+
+.metric-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.metric-value {
+  font-family: var(--font-mono);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.metric-value.green { color: var(--green); }
+.metric-value.red { color: var(--red); }
+.metric-value.gold { color: var(--gold); }
+
+.metric-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* ─── SECONDARY GRID ─────────────────────────────────────────────── */
+.secondary-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* ─── CARD ───────────────────────────────────────────────────────── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+.card-badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+.card-badge.live {
+  background: var(--green-bg);
+  color: var(--green);
+}
+
+.card-body {
+  padding: 20px;
+}
+
+/* ─── CHART ──────────────────────────────────────────────────────── */
+.chart-container {
+  width: 100%;
+  height: 220px;
+}
+
+/* ─── WALLET STATUS ──────────────────────────────────────────────── */
+.wallet-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.wallet-item:last-child { border-bottom: none; }
+
+.wallet-token {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.wallet-amount {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.reinvest-progress {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.reinvest-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green-dim), var(--green));
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.progress-fill.ready {
+  background: linear-gradient(90deg, var(--gold), #ffcc44);
+  animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 4px var(--gold); }
+  to { box-shadow: 0 0 12px var(--gold); }
+}
+
+/* ─── ACTIVITY FEED ──────────────────────────────────────────────── */
+.activity-feed {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 20px;
+  border-bottom: 1px solid rgba(26, 39, 68, 0.5);
+  font-size: 13px;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.activity-item:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.activity-time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  min-width: 70px;
+  padding-top: 2px;
+}
+
+.activity-icon {
+  font-size: 14px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.activity-text {
+  color: var(--text-secondary);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.activity-text strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.activity-text .amount {
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+.activity-text .amount.earned { color: var(--green); }
+.activity-text .amount.spent { color: var(--red); }
+.activity-text .amount.profit { color: var(--gold); }
+.activity-text .amount.reinvest { color: var(--purple); }
+
+/* ─── REINVESTMENT TABLE ─────────────────────────────────────────── */
+.reinvest-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.reinvest-table th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 500;
+}
+
+.reinvest-table td {
+  padding: 10px 12px;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(26, 39, 68, 0.5);
+  font-family: var(--font-mono);
+}
+
+.reinvest-table .tx-link {
+  color: var(--blue);
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.reinvest-table .tx-link:hover {
+  text-decoration: underline;
+}
+
+/* ─── EMPTY STATE ────────────────────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.empty-state-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+.empty-state-text {
+  font-size: 13px;
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .metrics-grid { grid-template-columns: 1fr; }
+  .secondary-grid { grid-template-columns: 1fr; }
+  .metric-value { font-size: 28px; }
+}
+
+@media (max-width: 768px) {
+  .dashboard { padding: 16px; }
+  .header { flex-direction: column; gap: 12px; align-items: flex-start; }
+  .header-status { width: 100%; justify-content: space-between; }
+}

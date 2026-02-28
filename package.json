@@ -1,0 +1,39 @@
+{
+  "name": "autonome",
+  "version": "1.0.0",
+  "description": "Self-operating AI agent that runs its own business on PinionOS — earns, spends, profits, and reinvests autonomously",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run agent\" \"next dev\"",
+    "dev:dashboard": "next dev",
+    "agent": "tsx src/agent/index.ts",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint src/",
+    "test:intel": "tsx scripts/test-intel.ts",
+    "seed": "tsx scripts/seed-demo.ts"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.7.0",
+    "concurrently": "^9.1.0",
+    "dotenv": "^17.3.1",
+    "ethers": "^6.13.0",
+    "next": "^14.2.0",
+    "pinion-os": "^0.4.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "recharts": "^2.15.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^20.17.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
