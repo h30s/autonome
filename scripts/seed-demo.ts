@@ -94,7 +94,7 @@ insertTx.run(
     null,
     0.40,
     null,
-    "0x7f3a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a",
+    "0xa2f9199e6aad027e6d68f46c90b31b4107f4903d8cf7fa7fa6c6838607bf013f",
     "-45"
 );
 
@@ -103,7 +103,7 @@ insertTx.run(
     null,
     0.42,
     null,
-    "0xa1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2",
+    "0x386929e11784c44ce78012308ab3663221e8706d68ee4befe0dd1e1e78341922",
     "-10"
 );
 
